@@ -1,0 +1,82 @@
+package com.company;
+import static java.lang.Integer.valueOf;
+
+public class Main {
+
+    public static void main(String[] args){
+    StringCalculator calc = new StringCalculator();
+    System.out.println(calc.Add("//;\n1;2\n3;4\n5;6\n7;8"));
+    }
+}
+
+class StringCalculator extends Spliter{
+
+    public int Add(String numbers){
+        if (numbers.equals(""))
+            return 0;
+        String delimeter = ",";
+        if (anoutherDelimeter(numbers)) {
+            delimeter = numbers.split("")[2];
+            numbers = withoutBeg(numbers);
+        }
+        numbers = numbers.replace("\n", delimeter);
+        String[] arr = SplitByDel(numbers,delimeter);
+        int sum = 0;
+        for (int i = 0; i < arr.length;i++)
+            sum += valueOf(arr[i]);
+        return sum;
+    }
+
+    private boolean anoutherDelimeter(String numbers){
+        String[] nums = numbers.split("");
+        if (nums.length<4)
+            return false;
+        if (nums[0].equals("/") && nums[1].equals("/") && nums[3].equals("\n"))
+            return true;
+        return false;
+    }
+
+    private String withoutBeg(String numbers){
+        String[] numS = numbers.split("");
+        String res = "";
+        for (int i = 4; i < numS.length;i++)
+            res = res  + numS[i];
+        return res;
+    }
+
+}
+
+class Spliter{
+
+    public String[] SplitByDel(String str, String del){
+        String[] arr = str.split("");
+        String[] result = null;
+        int ind1 = 0, ind2 = 0;
+        for (int i = 0; i< arr.length;i++){
+            if (arr[i].equals(del)){
+                ind2 = i;
+                result = append(result,arr,ind1,ind2);
+                ind1 = i+1;
+            }
+        }
+        if (ind1< arr.length)
+            return append(result,arr,ind1,arr.length);
+        return result;
+    }
+
+    public String[] append(String[] newarr, String[] arr, int ind1, int ind2){
+        int newLen = 1;
+        if (newarr!=null)
+            newLen = newarr.length+1;
+        String[] NewArr = new String[newLen];
+        String el = "";
+        for (int i = ind1; i<ind2; i++){
+            el = el + arr[i];
+        }
+        for (int i = 0; i<newLen-1;i++){
+            NewArr[i] = newarr[i];
+        }
+        NewArr[newLen-1] = el;
+        return NewArr;
+    }
+}
